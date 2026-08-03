@@ -31,6 +31,7 @@ adk web
 左上角下拉選 `hello_agent`，對它說句話。**它回話 = 環境完成。**
 
 詳細步驟見 [SETUP.md](SETUP.md)。
+卡住時怎麼看發生了什麼（adk web 介面導覽、Logs Explorer）見 [DEBUGGING.md](DEBUGGING.md)。
 
 ## 建議做法
 
