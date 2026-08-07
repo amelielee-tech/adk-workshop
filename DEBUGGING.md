@@ -9,7 +9,9 @@
 
 ```bash
 cd ~/adk-workshop
-adk web          # 保持這個終端機開著
+# Cloud Shell 必帶 --allow_origins（Web Preview 是代理，不帶會一對話就 403）
+adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev"
+# 本機跑則 adk web 即可。保持這個終端機開著。
 ```
 
 Cloud Shell：右上角 **Web Preview（眼睛圖示）→ Change port → 8000 → Preview**。
