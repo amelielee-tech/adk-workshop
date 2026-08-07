@@ -99,4 +99,42 @@ def record_revision(tool_context: ToolContext) -> dict:
     #   並對照 reviewer.py 的 instruction 怎麼配合這個工具。
     count = tool_context.state.get("revision_count", 0) + 1
     tool_context.state["revision_count"] = count
-    return {"revision_count": count, "is_final_round": count >= 3}
+    # is_final_round 在「倒數第二次退稿」就要亮——max_iterations=3 之下，
+    # 第 2 次退稿後的那輪 writer 是最後一次修改機會；等 count=3 才警告，
+    # 迴圈已經結束，誰都讀不到
+    return {"revision_count": count, "is_final_round": count >= 2}
+
+
+def check_copy_format(slogan: str, selling_points: list[str], short_copy: str) -> dict:
+    """檢查文案是否符合規格書，回傳各項量測數字。
+
+    規格書：slogan ≤ 12 字；賣點恰好 3 條；短文案 ≤ 50 字；
+    至少自然提及 1 個觸及管道。
+
+    Args:
+        slogan: 文案的 slogan
+        selling_points: 賣點列表
+        short_copy: 短文案內文
+
+    Returns:
+        dict: 各項規格的量測值與是否達標，all_passed 為總結論
+    """
+    # 設計重點：工具給「事實」（len() 算出來的數字），LLM 給「判斷」——
+    # 審稿的判準因此說得準、看得見，這正是迴圈方向盤該有的樣子
+    all_channels = {ch for p in MOCK_PROFILES.values() for ch in p["channels"]}
+    full_text = slogan + "".join(selling_points) + short_copy
+    channels_mentioned = sorted(ch for ch in all_channels if ch in full_text)
+    slogan_len = len(slogan.strip())
+    short_copy_len = len(short_copy.strip())
+    result = {
+        "slogan_len": slogan_len,
+        "slogan_ok": slogan_len <= 12,
+        "selling_point_count": len(selling_points),
+        "selling_points_ok": len(selling_points) == 3,
+        "short_copy_len": short_copy_len,
+        "short_copy_ok": short_copy_len <= 50,
+        "channels_mentioned": channels_mentioned,
+        "channel_ok": len(channels_mentioned) >= 1,
+    }
+    result["all_passed"] = all(v for k, v in result.items() if k.endswith("_ok"))
+    return {"status": "success", **result}

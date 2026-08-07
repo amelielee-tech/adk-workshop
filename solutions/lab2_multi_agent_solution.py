@@ -33,7 +33,11 @@
 # 目標客群輪廓：
 # {audience_profile}
 #
-# 根據以上研究，產出：一句 slogan、三個賣點、一段 50 字內的短文案。
+# 根據以上研究，產出符合規格書的文案：
+# - slogan：12 字以內
+# - 賣點：恰好三條
+# - 短文案：50 字以內
+# - 全文至少自然提及一個目標客群的觸及管道
 #
 # 審稿意見（如果有，必須根據意見修改）：
 # {review_feedback?}"""
@@ -59,8 +63,16 @@
 # def record_revision(tool_context: ToolContext) -> dict:
 #     count = tool_context.state.get("revision_count", 0) + 1
 #     tool_context.state["revision_count"] = count
-#     return {"revision_count": count, "is_final_round": count >= 3}
+#     return {"revision_count": count, "is_final_round": count >= 2}
+#     # 注意 >= 2 不是 3：max_iterations=3 下，第 2 次退稿後的 writer
+#     # 是最後一次修改機會；count=3 時迴圈已結束，警告沒人讀得到
 #
-# 驗證：故意讓 reviewer 挑剔（例如要求「slogan 必須押韻」），
-# 在 adk web 的 State 面板看 revision_count 逐輪 +1；
+# 驗證：LLM 天生不擅長字數控制，規格書（check_copy_format 的 50 字/12 字限制）
+# 常會讓迴圈自然轉起來——在 adk web 的 State 面板看 revision_count 逐輪 +1；
 # 第 3 輪 reviewer 的意見開頭會出現「最後一輪，請務必定稿」。
+#
+# ── 設計筆記：為什麼審稿判準是數字不是品味 ─────────────────────────
+# 迴圈的退出條件必須「可驗證」才不會漂：
+#   check_copy_format（工具）給事實 → reviewer（LLM）給判斷。
+# 主觀品味（有沒有記憶點）說不準，不適合當迴圈的方向盤——
+# 那種審查留給人，或留在迴圈外。
