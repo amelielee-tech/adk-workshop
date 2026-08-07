@@ -27,7 +27,7 @@ cd adk-workshop
 pip install -r requirements.txt
 cp .env.example .env        # 用 cloudshell edit .env 填自己的 project ID
 gcloud services enable aiplatform.googleapis.com
-adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev"   # Cloud Shell 必帶，見 SETUP.md
+adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev" --reload_agents   # 兩個參數都必帶，見 SETUP.md
 ```
 
 `adk web` 啟動後：Cloud Shell 右上角 **Web Preview → Change port → 8000 → Preview**，

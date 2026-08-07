@@ -5,7 +5,8 @@
    與回傳結構（status + 資料欄位）
 2. 什麼都別改，先跑一次：adk web 選 lab1_tools，問「幫我查運動鞋的市場趨勢」，
    看它「沒有工具」時怎麼回答，Events 面板裡也不會有 functionCall
-3. 解開下面 TODO(3) 那行註解 → 存檔 → 重整頁面 → New Session → 同一句再問
+3. 解開下面 TODO(3) 那行註解 → 存檔 → New Session → 同一句再問
+   （adk web 啟動要帶 --reload_agents 才會讀到新 code；沒生效就 Ctrl+C 重啟）
 4. 到 Events 面板找 functionCall：product_category 這個參數是 LLM 自己
    從你的話裡抽出來的——這個對比就是 tool 的意義
 
@@ -29,6 +30,6 @@ root_agent = Agent(
 回答時整理成條列式，並注明資料來自工具查詢。""",
     # TODO(3): 把兩個 tool 掛上來——tools 參數接一個 function 的 list。
     # 先「不解開」跑一次看它沒工具的樣子，再解開這行：
-    # 存檔 → 重整頁面 → New Session → 同一句再問，對比 Events 的差別。
+    # 存檔 → New Session → 同一句再問，對比 Events 的差別。
     # tools=[get_market_trends, get_audience_profile],
 )

@@ -9,9 +9,10 @@
 
 ```bash
 cd ~/adk-workshop
-# Cloud Shell 必帶 --allow_origins（Web Preview 是代理，不帶會一對話就 403）
-adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev"
-# 本機跑則 adk web 即可。保持這個終端機開著。
+# --allow_origins：Cloud Shell 必帶（Web Preview 是代理，不帶會一對話就 403）
+# --reload_agents：改 code 存檔自動重載（不帶的話，改 code 要重啟才生效）
+adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev" --reload_agents
+# 本機跑則 adk web --reload_agents 即可。保持這個終端機開著。
 ```
 
 Cloud Shell：右上角 **Web Preview（眼睛圖示）→ Change port → 8000 → Preview**。
@@ -20,7 +21,9 @@ Cloud Shell：右上角 **Web Preview（眼睛圖示）→ Change port → 8000 
 ### 介面導覽
 
 - **左上角下拉選單**：選要跑哪個 agent（hello_agent / lab1_tools / ...）。
-  改了 code 之後重新選一次 agent 或重整頁面即可，通常不用重啟 adk web。
+  改了 code：啟動時有帶 `--reload_agents` 的話，存檔後開 **New Session**
+  再問即可生效；沒帶的話（或懷疑沒生效）就 Ctrl+C 重啟 adk web——
+  agent 預設載入一次就快取，不會自己讀到新 code。
 - **中間對話區**：跟 agent 互動。
 - **左側 Events 面板**：每一步都是一個 event，點開可以看到——
   - `functionCall`：LLM 決定呼叫哪個 tool、帶了什麼參數

@@ -55,12 +55,14 @@ gcloud services enable aiplatform.googleapis.com
 ### 5. 驗證：跑通 hello agent
 
 ```bash
-adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev"
+adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev" --reload_agents
 ```
 
-（`--allow_origins` 在 Cloud Shell **必帶**：Web Preview 是反向代理，
-ADK 的 CSRF 防護會把它當陌生來源，少了這個參數，畫面開得起來、
-但一開始對話就會 403。這行全班通用，直接複製。）
+兩個參數都**必帶**，這行全班通用、直接複製：
+- `--allow_origins`：Web Preview 是反向代理，ADK 的 CSRF 防護會把它當
+  陌生來源——少了它，畫面開得起來、但一開始對話就 403。
+- `--reload_agents`：改 code 存檔後自動重新載入 agent。少了它，
+  改任何 code 都要 Ctrl+C 重啟 adk web 才生效（Lab 都要改 code，必開）。
 
 - 右上角 **Web Preview → Change port → 8000 → Preview**
 - 左上角下拉選 `hello_agent`
