@@ -39,10 +39,17 @@ def get_audience_profile(country: str) -> dict:
         country: 國家或地區，例如「台灣」「日本」
 
     Returns:
-        dict: 包含 age_group（主力年齡層）、interests（興趣）、channels（觸及管道）
+        dict: 成功時包含 age_group（主力年齡層）、interests（興趣）、
+        channels（觸及管道）；查無該國資料時 status 為 error
     """
-    # TODO(2): 仿照 get_market_trends，回傳 mock 的客群資料 dict
-    # （至少包含 age_group、interests、channels 三個 key）
+    # TODO(2): 仿照 get_market_trends 回傳 mock dict——多一個看點：
+    # 不支援的國家走 error 分支。試試問「德國的客群」，
+    # 觀察 LLM 讀到 status=error 之後怎麼跟使用者說。
+    if country not in ("台灣", "日本"):
+        return {
+            "status": "error",
+            "error_message": f"查無「{country}」的客群資料，目前僅支援：台灣、日本",
+        }
     return {
         "status": "success",
         "country": country,

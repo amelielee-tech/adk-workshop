@@ -33,8 +33,14 @@ def get_audience_profile(country: str) -> dict:
         country: 國家或地區，例如「台灣」「日本」
 
     Returns:
-        dict: 包含 age_group（主力年齡層）、interests（興趣）、channels（觸及管道）
+        dict: 成功時包含 age_group（主力年齡層）、interests（興趣）、
+        channels（觸及管道）；查無該國資料時 status 為 error
     """
+    if country not in ("台灣", "日本"):
+        return {
+            "status": "error",
+            "error_message": f"查無「{country}」的客群資料，目前僅支援：台灣、日本",
+        }
     return {
         "status": "success",
         "country": country,
