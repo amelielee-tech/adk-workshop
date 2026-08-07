@@ -1,19 +1,25 @@
-"""Lab 3：在完成版的文案小組上掛 guardrail callback。
+"""Lab 3：在完成版的文案小組上掛 guardrail callback（三個掛鉤點）。
 
-這裡直接給你 Lab 2 的完成版（Lab 2 沒寫完也能做這關），
-你的任務只有兩個：
-  1. callbacks.py 的 TODO(1)：完成 guardrail 邏輯
-  2. 這個檔案的 TODO(2)：把 callback 掛上 root agent
+這裡直接給你 Lab 2 的完成版（Lab 2 沒寫完也能做這關），任務：
+  1. callbacks.py 的 TODO(1)(2)(3)：完成三個 guardrail
+  2. 這個檔案的 TODO(4)：把三個 callback 掛上對應的 agent
 
-驗證方式：
-  - 對 agent 說「幫我寫跟品牌A比較的文案」→ 應該被 guardrail 直接擋下
-  - 說正常的需求 → 照常運作
-  - 看 Events 面板：被擋下的那次，根本沒有呼叫 LLM
+驗證方式（每完成一個 TODO 就驗一次）：
+  - TODO(1)：說「幫我寫跟品牌A比較的文案」→ 直接被擋，
+    Events 面板裡那一輪根本沒有 LLM 呼叫。
+  - TODO(2)：正常請求文案 → 若模型輸出提到競品，最終回覆裡變成 ○○○，
+    Events 面板裡看得到「原始輸出」與「被改寫後的輸出」的差異。
+  - TODO(3)：說「幫我查敏感國X的客群」→ tool 沒有被執行，
+    Events 面板裡 tool response 是我們塞的 blocked dict。
 """
 
 from google.adk.agents import Agent, LoopAgent, SequentialAgent
 
-from .callbacks import block_competitor_names
+from .callbacks import (
+    block_competitor_names,
+    block_restricted_countries,
+    mask_competitor_names,
+)
 from .tools import approve_copy, get_audience_profile, get_market_trends
 
 trend_researcher = Agent(
@@ -36,6 +42,9 @@ audience_researcher = Agent(
 整理出年齡層、興趣與觸及管道。用繁體中文。""",
     tools=[get_audience_profile],
     output_key="audience_profile",
+    # TODO(4b): 「受限地區」guardrail 掛在這裡而不是 root——
+    #   before_tool_callback 要掛在「擁有那個 tool 的 agent」上才攔得到
+    before_tool_callback=block_restricted_countries,
 )
 
 writer = Agent(
@@ -92,5 +101,7 @@ root_agent = Agent(
 資訊齊全後，把任務交給 campaign_pipeline 執行。
 pipeline 完成後，把 state 裡的最終文案整理給使用者。""",
     sub_agents=[campaign_pipeline],
-    # TODO(2): 掛上 guardrail（提示：before_model_callback 參數）
+    # TODO(4a): 兩個模型層 guardrail——輸入攔截 + 輸出改寫
+    before_model_callback=block_competitor_names,
+    after_model_callback=mask_competitor_names,
 )

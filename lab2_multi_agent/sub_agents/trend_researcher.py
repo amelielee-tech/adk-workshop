@@ -19,4 +19,5 @@ trend_researcher = Agent(
 然後用 3-5 個條列整理重點趨勢與競品概況。用繁體中文。""",
     tools=[get_market_trends],
     # TODO(1): 設定 output_key，讓這個 agent 的產出寫進 state["market_trends"]
+    output_key="market_trends",
 )

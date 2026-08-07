@@ -19,5 +19,6 @@ root_agent = Agent(
     instruction="""你是市場研究助理，用繁體中文回答。
 使用者詢問市場或客群資訊時，務必使用工具查詢，不要憑空編造。
 回答時整理成條列式，並注明資料來自工具查詢。""",
-    # TODO(3): 把兩個 tool 掛上來（提示：tools 參數接一個 function 的 list）
+    # TODO(3): 把兩個 tool 掛上來——tools 參數接一個 function 的 list
+    tools=[get_market_trends, get_audience_profile],
 )

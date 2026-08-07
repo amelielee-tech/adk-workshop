@@ -54,3 +54,13 @@
 #     ...,
 #     sub_agents=[campaign_pipeline],
 # )
+
+# ── TODO(6) tools.py：在 tool 裡讀寫 state ────────────────────────
+# def record_revision(tool_context: ToolContext) -> dict:
+#     count = tool_context.state.get("revision_count", 0) + 1
+#     tool_context.state["revision_count"] = count
+#     return {"revision_count": count, "is_final_round": count >= 3}
+#
+# 驗證：故意讓 reviewer 挑剔（例如要求「slogan 必須押韻」），
+# 在 adk web 的 State 面板看 revision_count 逐輪 +1；
+# 第 3 輪 reviewer 的意見開頭會出現「最後一輪，請務必定稿」。

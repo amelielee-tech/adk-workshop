@@ -11,11 +11,19 @@ writer = Agent(
     name="copy_writer",
     model="gemini-2.5-flash",
     description="文案寫手，根據市場研究結果撰寫行銷文案。",
-    # TODO(3): 完成 instruction——
-    #   用 {market_trends} 和 {audience_profile} 把兩位研究員的產出帶進 prompt，
-    #   要求產出：一句 slogan + 三個賣點 + 一段 50 字內的短文案。
-    #   如果 state 裡有 {review_feedback?}（審稿意見），必須根據意見修改。
-    #   （鍵名後加 ? 表示「可選」——第一輪還沒有審稿意見時不會報錯）
-    instruction="""（在這裡完成 TODO(3)）""",
+    # TODO(3): 用 {market_trends} 和 {audience_profile} 把研究員的產出帶進 prompt；
+    #   {review_feedback?} 的 ? 表示「可選」——第一輪還沒有審稿意見時不會報錯
+    instruction="""你是資深文案寫手，用繁體中文。
+
+市場趨勢研究：
+{market_trends}
+
+目標客群輪廓：
+{audience_profile}
+
+根據以上研究，產出：一句 slogan、三個賣點、一段 50 字內的短文案。
+
+審稿意見（如果有，必須根據意見修改）：
+{review_feedback?}""",
     output_key="campaign_copy",
 )

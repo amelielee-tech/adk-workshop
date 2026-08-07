@@ -18,16 +18,18 @@ def get_market_trends(product_category: str) -> dict:
     Returns:
         dict: 包含 trends（近期趨勢列表）與 competitors（主要競品）
     """
-    # TODO(1): 回傳一個 mock 的趨勢資料 dict
-    # 格式範例：
-    # {
-    #     "status": "success",
-    #     "category": product_category,
-    #     "trends": ["永續材質成為主流", "聯名款帶動話題", "短影音開箱是主要導購管道"],
-    #     "competitors": ["品牌A", "品牌B"],
-    # }
-    # 提示：內容可以自己編，重點是回傳結構清楚的 dict
-    pass
+    # TODO(1): 回傳一個 mock 的趨勢資料 dict——內容可以自己編，
+    # 重點是結構清楚（status + 資料欄位），LLM 才好消化
+    return {
+        "status": "success",
+        "category": product_category,
+        "trends": [
+            "永續材質成為主流話題",
+            "聯名限定款帶動搶購潮",
+            "短影音開箱是最主要的導購管道",
+        ],
+        "competitors": ["品牌A", "品牌B", "品牌C"],
+    }
 
 
 def get_audience_profile(country: str) -> dict:
@@ -39,6 +41,12 @@ def get_audience_profile(country: str) -> dict:
     Returns:
         dict: 包含 age_group（主力年齡層）、interests（興趣）、channels（觸及管道）
     """
-    # TODO(2): 仿照 get_market_trends，回傳一個 mock 的客群資料 dict
-    # 至少包含 age_group、interests、channels 三個 key
-    pass
+    # TODO(2): 仿照 get_market_trends，回傳 mock 的客群資料 dict
+    # （至少包含 age_group、interests、channels 三個 key）
+    return {
+        "status": "success",
+        "country": country,
+        "age_group": "22-35 歲",
+        "interests": ["健身", "路跑", "潮流穿搭", "咖啡"],
+        "channels": ["Instagram", "YouTube Shorts", "Dcard"],
+    }
