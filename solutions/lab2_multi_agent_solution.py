@@ -50,8 +50,11 @@
 # )
 # campaign_pipeline = SequentialAgent(
 #     name="campaign_pipeline",
-#     sub_agents=[trend_researcher, audience_researcher, write_review_loop],
+#     sub_agents=[trend_researcher, audience_researcher, write_review_loop, finalizer],
 # )
+# 注意最後一棒 finalizer（sub_agents/finalizer.py）：transfer 之後 root
+# 拿不回控制權，若三輪審稿都沒過、迴圈被保險絲終止，沒有 finalizer 的話
+# 對話會停在 reviewer 的退稿意見——成品躺在 state 裡沒人端出來。
 
 # ── TODO(5) agent.py：掛 sub_agents ───────────────────────────────
 # root_agent = Agent(
@@ -76,3 +79,14 @@
 #   check_copy_format（工具）給事實 → reviewer（LLM）給判斷。
 # 主觀品味（有沒有記憶點）說不準，不適合當迴圈的方向盤——
 # 那種審查留給人，或留在迴圈外。
+#
+# ── 設計筆記：回饋要帶目標值 ──────────────────────────────────────
+# check_copy_format 的回傳連「上限」一起給（short_copy_limit 等欄位）。
+# 實走時抓到的教訓：只回「61 字、不合格」，reviewer 會從 docstring
+# 腦補目標值——docstring 一旦跟 code 脫鉤，writer 就朝錯的目標修，
+# 迴圈永不收斂。權威數字只能有一個來源：工具的回傳值。
+#
+# ── 設計筆記：中間棒不要寒暄 ──────────────────────────────────────
+# researcher/writer 的讀者是「下一位 agent」不是人——開場白與結尾反問
+# 會原封不動存進 state（output_key 存的是整段回覆），下游拿到髒原料。
+# 所以 instruction 明說「直接輸出結果，不要寒暄」。

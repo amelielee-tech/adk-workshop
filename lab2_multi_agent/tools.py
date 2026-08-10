@@ -120,7 +120,10 @@ def check_copy_format(slogan: str, selling_points: list[str], short_copy: str) -
         dict: 各項規格的量測值與是否達標，all_passed 為總結論
     """
     # 設計重點：工具給「事實」（len() 算出來的數字），LLM 給「判斷」——
-    # 審稿的判準因此說得準、看得見，這正是迴圈方向盤該有的樣子
+    # 審稿的判準因此說得準、看得見，這正是迴圈方向盤該有的樣子。
+    # 回傳裡「連上限一起給」：reviewer 引用的目標值永遠與 code 同步
+    # （不會從 docstring 腦補），writer 才能一輪就改到位——回饋要帶目標值。
+    slogan_limit, required_points, short_copy_limit = 12, 3, 50
     all_channels = {ch for p in MOCK_PROFILES.values() for ch in p["channels"]}
     full_text = slogan + "".join(selling_points) + short_copy
     channels_mentioned = sorted(ch for ch in all_channels if ch in full_text)
@@ -128,11 +131,14 @@ def check_copy_format(slogan: str, selling_points: list[str], short_copy: str) -
     short_copy_len = len(short_copy.strip())
     result = {
         "slogan_len": slogan_len,
-        "slogan_ok": slogan_len <= 12,
+        "slogan_limit": slogan_limit,
+        "slogan_ok": slogan_len <= slogan_limit,
         "selling_point_count": len(selling_points),
-        "selling_points_ok": len(selling_points) == 3,
+        "selling_point_required": required_points,
+        "selling_points_ok": len(selling_points) == required_points,
         "short_copy_len": short_copy_len,
-        "short_copy_ok": short_copy_len <= 50,
+        "short_copy_limit": short_copy_limit,
+        "short_copy_ok": short_copy_len <= short_copy_limit,
         "channels_mentioned": channels_mentioned,
         "channel_ok": len(channels_mentioned) >= 1,
     }

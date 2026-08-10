@@ -28,6 +28,9 @@ writer = Agent(
 - 全文至少自然提及一個目標客群的觸及管道
 
 審稿意見（如果有，必須根據意見修改）：
-{review_feedback?}""",
+{review_feedback?}
+
+直接輸出文案本體（Slogan／賣點／短文案三段），
+不要開場白或說明你做了什麼——你的輸出會被存進 state 供審稿使用。""",
     output_key="campaign_copy",
 )

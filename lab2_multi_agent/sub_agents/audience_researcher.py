@@ -16,7 +16,9 @@ audience_researcher = Agent(
     description="客群研究員，負責查詢並整理目標客群輪廓。",
     instruction="""你是客群研究員。
 根據使用者提到的市場/國家，使用工具查詢目標客群，
-整理出年齡層、興趣與觸及管道。用繁體中文。""",
+整理出年齡層、興趣與觸及管道。用繁體中文。
+直接輸出條列結果——你的讀者是下一位 agent 不是人類，
+不要開場白、結尾寒暄或反問。""",
     tools=[get_audience_profile],
     output_key="audience_profile",
 )
