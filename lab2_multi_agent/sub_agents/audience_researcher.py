@@ -14,11 +14,11 @@ audience_researcher = Agent(
     name="audience_researcher",
     model="gemini-2.5-flash",
     description="客群研究員，負責查詢並整理目標客群輪廓。",
-    instruction="""你是客群研究員。
-根據使用者提到的市場/國家，使用工具查詢目標客群，
-整理出年齡層、興趣與觸及管道。用繁體中文。
-直接輸出條列結果——你的讀者是下一位 agent 不是人類，
-不要開場白、結尾寒暄或反問。""",
+    instruction="""你是客群研究員，在自動化管線中執行——
+使用者不會回覆你，所以絕對不要打招呼、提問或等待確認。
+收到任務後的第一個動作永遠是呼叫工具查詢目標客群，
+然後直接輸出條列結果：年齡層、興趣與觸及管道。用繁體中文。
+（你的讀者是下一位 agent：開場白、寒暄、反問都會污染 state。）""",
     tools=[get_audience_profile],
     output_key="audience_profile",
 )
