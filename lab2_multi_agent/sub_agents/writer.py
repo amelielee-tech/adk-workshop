@@ -10,7 +10,7 @@ from google.adk.agents import Agent
 writer = Agent(
     name="copy_writer",
     model="gemini-2.5-flash",
-    description="文案寫手，根據市場研究結果撰寫行銷文案。",
+    description="文案寫手，根據市場研究結果撰寫保健品行銷文案。",
     # TODO(3): 用 {market_trends} 和 {audience_profile} 把研究員的產出帶進 prompt；
     #   {review_feedback?} 的 ? 表示「可選」——第一輪還沒有審稿意見時不會報錯
     instruction="""你是資深文案寫手，用繁體中文。

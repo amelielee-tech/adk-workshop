@@ -1,22 +1,22 @@
-# ADK Multi-Agent Workshop：文案小組
+# ADK Multi-Agent Workshop：保健品文案小組
 
-用同一個例子（行銷文案小組）從零打造 multi-agent 系統，體驗 ADK 1.x 的協作方式，
+用同一個例子（保健品行銷文案小組）從零打造 multi-agent 系統，體驗 ADK 1.x 的協作方式，
 最後對比 ADK 2.0 的 graph-based workflow。
 
 ## 課程對應
 
 | 階段 | 資料夾 | 內容 | 形式 |
 |---|---|---|---|
-| 課前 | `hello_agent/` | 最小 agent，跑通 = 環境 OK | 完整可跑 |
-| Lab 1 | `lab1_tools/` | Agent 怎麼用 tool | 讀 TODO(1)(2)，動手解開 TODO(3) 一行註解 |
+| 暖身 | `hello_agent/` + `lab1_tools/` | 環境 OK + 看一次 tool 呼叫的機制 | 10 分鐘帶過，不當正式練習 |
 | Lab 2 | `lab2_multi_agent/` | 主戰場：sub-agent、session state、SequentialAgent、LoopAgent、ToolContext 讀寫 state | 完整可跑，跟著 TODO 標註讀 |
-| Lab 3 | `lab3_callbacks/` | 用 callback 做 guardrail（before_model / after_model / before_tool 三掛鉤對比） | 完整可跑，跟著 TODO 標註讀 |
-| Demo | `lab4_workflow_graph/` | ADK 2.0 graph 對比（講師示範/閱讀材料） | 閱讀 |
+| Lab 3 | `lab3_callbacks/` | callback 做 guardrail（before_model/after_model/before_tool）＋ **memory**（before/after_agent，跨 session 記憶） | 完整可跑，跟著 TODO 標註讀 |
+| Lab 4 | `lab4_mcp/` | **MCP**：接別人建的（Fetch）＋做一個自己的（合規檢查 server） | 完整可跑，跟著 TODO 標註讀 |
+| Lab 5 | `lab5_workflow_graph/` | 把 Lab 1–4 整套翻成 ADK 2.0 graph（講師示範/閱讀材料） | 閱讀 |
 | 延伸 | `challenges.md` | 給快的人的挑戰題 | 自選 |
 
+情境：**保健品行銷文案小組**（選這個是因為保健品廣告法規很具體，Lab 3 的護欄才「真實」而非硬湊）。
 Lab 裡的 `TODO(n)` 標註是導讀路標：解答已填好，照編號順序讀、每讀完一個就跑一次觀察行為。
-（例外：Lab 1 的 TODO(3) `tools=[...]` 預設是**註解狀態**——先跑一次沒工具的版本看它瞎掰，
-再解開註解對比 Events 的差別，這個對比就是 Lab 1 的重點。）
+（`lab1_tools/` 已降級成暖身：實習程度夠的話直接從 Lab 2 開始，lab1 當自讀。）
 想自己動手挑戰的話，把 TODO 那幾行刪掉重寫，再和 `solutions/` 對答案；延伸挑戰見 `challenges.md`。
 
 ## 快速開始（Cloud Shell）

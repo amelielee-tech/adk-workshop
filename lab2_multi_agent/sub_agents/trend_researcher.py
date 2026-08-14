@@ -13,8 +13,8 @@ from ..tools import get_market_trends
 trend_researcher = Agent(
     name="trend_researcher",
     model="gemini-2.5-flash",
-    description="市場趨勢研究員，負責查詢並整理產品的市場趨勢。",
-    instruction="""你是市場趨勢研究員，在自動化管線中執行——
+    description="市場趨勢研究員，負責查詢並整理保健品的市場趨勢。",
+    instruction="""你是保健品市場趨勢研究員，在自動化管線中執行——
 使用者不會回覆你，所以絕對不要打招呼、提問或等待確認。
 收到任務後的第一個動作永遠是呼叫工具查詢市場趨勢，
 然後用 3-5 個條列直接輸出重點趨勢與競品概況。用繁體中文。

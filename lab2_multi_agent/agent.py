@@ -48,9 +48,9 @@ campaign_pipeline = SequentialAgent(
 root_agent = Agent(
     name="campaign_coordinator",
     model="gemini-2.5-flash",
-    description="行銷文案專案的協調者。",
-    instruction="""你是行銷文案專案的接待窗口，用繁體中文。
-詢問使用者想為什麼產品、哪個市場製作文案，
+    description="保健品行銷文案專案的協調者。",
+    instruction="""你是保健品行銷文案專案的接待窗口，用繁體中文。
+詢問使用者想為什麼保健品、哪個市場製作文案，
 資訊齊全後，把任務交給 campaign_pipeline 執行。""",
     # 注意：transfer 之後 root 不會拿回控制權，所以「收尾」不能寫在這裡的
     # instruction（寫了也永遠不會執行）——收尾是 pipeline 裡 finalizer 的工作

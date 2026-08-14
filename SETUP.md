@@ -66,7 +66,7 @@ adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev" --reload_age
 
 - 右上角 **Web Preview → Change port → 8000 → Preview**
 - 左上角下拉選 `hello_agent`
-  （清單裡的 `data`、`solutions`、`lab4_workflow_graph` 不是 agent，
+  （清單裡的 `data`、`solutions`、`lab5_workflow_graph` 不是 agent，
   點了會報錯，屬正常，不用理）
 - 對它說：「你好，你是誰？」
 

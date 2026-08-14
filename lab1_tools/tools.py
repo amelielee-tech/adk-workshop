@@ -5,15 +5,15 @@ Agent 的 tool 就是普通的 Python function：
 - 所以 docstring 要寫清楚——它就是給 LLM 看的說明書
 
 這裡用 mock 資料（寫死的 dict），重點是學「agent 怎麼用 tool」。
-想接真的 BigQuery？做完主線後看 challenges.md 的挑戰 3。
+情境是保健品行銷。想接真的 BigQuery？做完主線後看 challenges.md 的挑戰 3。
 """
 
 
 def get_market_trends(product_category: str) -> dict:
-    """查詢指定產品類別的市場趨勢。
+    """查詢指定保健品類別的市場趨勢。
 
     Args:
-        product_category: 產品類別，例如「運動鞋」「咖啡」「手搖飲」
+        product_category: 保健品類別，例如「魚油」「益生菌」「葉黃素」
 
     Returns:
         dict: 包含 trends（近期趨勢列表）與 competitors（主要競品）
@@ -26,9 +26,9 @@ def get_market_trends(product_category: str) -> dict:
         "status": "success",
         "category": product_category,
         "trends": [
-            "永續材質成為主流話題",
-            "聯名限定款帶動搶購潮",
-            "短影音開箱是最主要的導購管道",
+            "「無添加」與「有效成分含量標示」成為選購主流",
+            "銀髮保養與慢性調理族群快速成長",
+            "短影音與 KOL 開箱是最主要的導購管道",
         ],
         "competitors": ["品牌A", "品牌B", "品牌C"],
     }
@@ -38,23 +38,24 @@ def get_market_trends(product_category: str) -> dict:
 # 跟真資料庫「query 回來零筆」是同一個形狀，之後接 BQ（挑戰 4）不用改邏輯
 MOCK_PROFILES = {
     "台灣": {
-        "age_group": "22-35 歲",
-        "interests": ["健身", "路跑", "潮流穿搭", "咖啡"],
-        "channels": ["Instagram", "YouTube Shorts", "Dcard"],
+        "age_group": "35-55 歲",
+        "interests": ["保健養生", "運動健身", "抗老"],
+        "channels": ["Facebook", "LINE", "YouTube"],
     },
     "日本": {
-        "age_group": "25-40 歲",
-        "interests": ["露營", "職人咖啡", "城市慢跑"],
+        "age_group": "40-60 歲",
+        "interests": ["抗老", "機能食品", "骨骼保健"],
         "channels": ["LINE", "X", "YouTube"],
     },
 }
 
 
-def get_audience_profile(country: str) -> dict:
-    """查詢指定國家/地區的目標客群輪廓。
+def get_audience_profile(country: str, audience_group: str = "一般成人") -> dict:
+    """查詢指定市場／客群的目標客群輪廓。
 
     Args:
         country: 國家或地區，例如「台灣」「日本」
+        audience_group: 目標客群，例如「一般成人」「銀髮族」
 
     Returns:
         dict: 成功時包含 age_group（主力年齡層）、interests（興趣）、
@@ -70,4 +71,4 @@ def get_audience_profile(country: str) -> dict:
                 f"查無「{country}」的客群資料，目前僅支援：{'、'.join(MOCK_PROFILES)}"
             ),
         }
-    return {"status": "success", "country": country, **profile}
+    return {"status": "success", "country": country, "audience_group": audience_group, **profile}

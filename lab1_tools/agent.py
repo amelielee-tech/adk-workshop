@@ -3,7 +3,7 @@
 流程：
 1. 先讀 tools.py 的 TODO(1)(2)——兩個工具已寫好，重點看 docstring（給 LLM 的說明書）
    與回傳結構（status + 資料欄位）
-2. 什麼都別改，先跑一次：adk web 選 lab1_tools，問「幫我查運動鞋的市場趨勢」，
+2. 什麼都別改，先跑一次：adk web 選 lab1_tools，問「幫我查魚油的市場趨勢」，
    看它「沒有工具」時怎麼回答，Events 面板裡也不會有 functionCall
 3. 解開下面 TODO(3) 那行註解 → 存檔 → New Session → 同一句再問
    （adk web 啟動要帶 --reload_agents 才會讀到新 code；沒生效就 Ctrl+C 重啟）
