@@ -1,4 +1,4 @@
 # 釘在 1.x 最新版：本工作坊教 1.x 範式（SequentialAgent/LoopAgent）
-# ADK 2.x（graph workflow）已發布，見 lab4_workflow_graph/
+# ADK 2.x（graph workflow）已發布，見 lab5_workflow_graph/
 google-adk==1.37.0
 google-cloud-bigquery==3.27.0
