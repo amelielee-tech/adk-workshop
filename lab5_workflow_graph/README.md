@@ -40,6 +40,20 @@ START ─> load_memory ─┬─> trend_researcher ─────┐
 **核心一句話：流程從「LLM 的一種行為」變成「程式的一個資料結構」。**
 不確定性關進節點裡，流程本身可測試、可重現，還免費拿到並行與 human-in-the-loop。
 
+## 跑得起來的差異示範（不用 adk web、不用 API key）
+
+`workflow.py` 是示意 code（2.0 Python graph 仍 alpha），但差異可以**實際跑給人看**：
+
+```bash
+python lab5_workflow_graph/compare.py
+```
+
+它用兩個「假研究員」示範兩個核心差別，看得到數字：
+- **序列 vs 並行**：1.x 排隊 ≈ 2.4s、2.0 並行 ≈ 1.2s（快一倍，研究員越多差距越大）
+- **迴圈跳出**：2.0 的 `route_quality` 是純 Python，同樣的 state 永遠走同一條邊（可測試、可重現）
+
+當天建議節奏：adk web 跑 **lab2**（看 researcher 排隊）→ `compare.py`（看並行快一倍）→ 讀 `workflow.py`（完整 2.0 圖）。**體感痛點 → 量化差異 → 看解法。**
+
 > 只點到、不做：**MCP 是 agent 接工具，A2A 是 agent 接 agent**（跨系統/跨組織互相呼叫）——那是 capstone 的主題。
 
 延伸閱讀：
