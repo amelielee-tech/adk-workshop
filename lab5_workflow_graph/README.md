@@ -1,8 +1,12 @@
 # Lab 5（Demo）：把 Lab 1–4 整套翻成 ADK 2.0
 
-> 注意：ADK 2.0 的 graph API 目前 Go 版先行、Python 版仍在 alpha，
-> 這個資料夾是**閱讀材料 / 講師示範**，不保證在你的環境直接跑起來
->（所以刻意不放 `__init__.py`，`adk web` 不會載入它）。
+> ADK 2.0 已正式 **GA**（Python 2026-05、Go 2026-06）。
+> **真的能跑的版本在 [`lab5_demo.ipynb`](./lab5_demo.ipynb)**——用正式版 `google-adk>=2.0`，
+> Colab 一鍵開、跑出真的 2.0 graph（並行 + 彙整）。
+> 其餘檔案是講解材料：`compare.py` 示範並行原理、`workflow.py` 是完整 graph 的對照。
+>（刻意不放 `__init__.py`，因為 2.0 用 notebook / `Runner` 跑，不走 `adk web`。）
+>
+> **Colab 連結**：`https://colab.research.google.com/github/amelielee-tech/adk-workshop/blob/main/lab5_workflow_graph/lab5_demo.ipynb`
 
 這一關不是新做一個系統，而是**回頭把你 Lab 1–4 蓋好的東西，用 2.0 的語言重講一次**——
 看同一套 agent／工具／護欄／記憶，在「明確的圖」裡長什麼樣。
