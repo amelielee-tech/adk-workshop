@@ -31,7 +31,7 @@ adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev" --reload_age
 ```
 
 `adk web` 啟動後：Cloud Shell 右上角 **Web Preview → Change port → 8000 → Preview**，
-左上角下拉選 `hello_agent`（清單裡的 `data`/`solutions`/`lab4` 不是 agent，點了會報錯屬正常），
+左上角下拉選 `hello_agent`（清單裡的 `data`/`solutions`/`lab5_workflow_graph` 不是 agent，點了會報錯屬正常），
 對它說句話。**它回話 = 環境完成。**
 
 > 模型註記：教材以 `gemini-2.5-flash` 測試（官方退役不早於 2026-10-16）。
