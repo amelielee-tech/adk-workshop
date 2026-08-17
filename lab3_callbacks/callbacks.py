@@ -137,21 +137,33 @@ def block_restricted_requests(
 
 
 async def load_brand_memory(callback_context: CallbackContext) -> Optional[Any]:
-    """before_agent：agent 開跑前，從跨 session 的 memory 撈這個品牌過去的內容，
+    """before_agent：agent 開跑前，從跨 session 的 memory 撈「過去做過的文案」，
     塞進 state["brand_memory"] 供下游 writer 參考。
 
     第一次跑 memory 是空的——先跑完一次（after_agent 會存），下次再跑就撈得到。
     回傳 None → agent 照常執行（我們只是「順路載入記憶」，不攔截）。
+
+    ⚠ InMemoryMemoryService 的搜尋只比對「英文單字」（re.findall([A-Za-z]+)），
+    完全忽略中文——所以查詢要用「一定會出現在文案裡的英文字」（通路名 Facebook/
+    LINE/YouTube、文案標籤 Slogan…）才撈得到。正式環境換 Vertex Memory Bank/RAG
+    才有中文語意搜尋。
+    （另：我們沒有具體品牌名，所以這裡是「跨 session 記得過去做過什麼」，不是
+     「鎖定同一品牌」——真實系統會再用品牌名/客戶 id 去 scope。）
     """
     # TODO(5a): 用 callback_context.search_memory 撈記憶，整理成文字寫進 state
     try:
-        resp = await callback_context.search_memory("保健品行銷文案 品牌調性")
+        # 用英文錨點查詢，繞過 InMemory「只搜英文」的限制
+        resp = await callback_context.search_memory(
+            "Slogan Selling Points Short Text Facebook LINE YouTube Omega EPA DHA"
+        )
         snippets = []
         for m in resp.memories:
             if m.content and m.content.parts:
-                snippets.append("".join(p.text or "" for p in m.content.parts))
+                text = "".join(p.text or "" for p in m.content.parts).strip()
+                if text and text not in snippets:
+                    snippets.append(text[:200])
         callback_context.state["brand_memory"] = (
-            "\n".join(snippets) if snippets else "（尚無過去記錄）"
+            "\n---\n".join(snippets[:3]) if snippets else "（尚無過去記錄）"
         )
     except Exception:
         callback_context.state["brand_memory"] = "（memory 未啟用）"
