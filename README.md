@@ -17,7 +17,7 @@
 情境：**保健品行銷文案小組**（選這個是因為保健品廣告法規很具體，Lab 3 的護欄才「真實」而非硬湊）。
 Lab 裡的 `TODO(n)` 標註是導讀路標：解答已填好，照編號順序讀、每讀完一個就跑一次觀察行為。
 （`lab1_tools/` 已降級成暖身：實習程度夠的話直接從 Lab 2 開始，lab1 當自讀。）
-想自己動手挑戰的話，把 TODO 那幾行刪掉重寫，再和 `solutions/` 對答案；延伸挑戰見 `challenges.md`。
+想自己動手挑戰的話，把 TODO 那幾行刪掉重寫，再用 git 對答案（`git diff` 就是解答）；延伸挑戰見 `challenges.md`（解答在 `solutions/challenges_solution.md`）。
 
 ## 快速開始（Cloud Shell）
 
@@ -39,7 +39,6 @@ adk web --allow_origins="regex:https://8000-cs-.*\.cloudshell\.dev" --reload_age
 
 詳細步驟見 [SETUP.md](SETUP.md)。
 卡住時怎麼看發生了什麼（adk web 介面導覽、Logs Explorer）見 [DEBUGGING.md](DEBUGGING.md)。
-想讀更完整的設計理念導覽（英文版，含每個 lab 的 why）見 [OVERVIEW.en.md](OVERVIEW.en.md)。
 
 ## 建議做法
 
