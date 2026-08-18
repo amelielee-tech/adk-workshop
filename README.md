@@ -1,7 +1,7 @@
 # ADK Multi-Agent Workshop：保健品文案小組
 
 用同一個例子（保健品行銷文案小組）從零打造 multi-agent 系統，體驗 ADK 1.x 的協作方式，
-最後對比 ADK 2.0 的 graph-based workflow。
+最後在 Colab 用**正式版 ADK 2.0**（Python 2026-05 已 GA）真的跑一次 graph-based workflow。
 
 ## 課程對應
 
@@ -11,7 +11,7 @@
 | Lab 2 | `lab2_multi_agent/` | 主戰場：sub-agent、session state、SequentialAgent、LoopAgent、ToolContext 讀寫 state | 完整可跑，跟著 TODO 標註讀 |
 | Lab 3 | `lab3_callbacks/` | callback 做 guardrail（before_model/after_model/before_tool）＋ **memory**（before/after_agent，跨 session 記憶） | 完整可跑，跟著 TODO 標註讀 |
 | Lab 4 | `lab4_mcp/` | **MCP**：接別人建的（Fetch）＋做一個自己的（合規檢查 server） | 完整可跑，跟著 TODO 標註讀 |
-| Lab 5 | `lab5_workflow_graph/` | 把 Lab 1–4 整套翻成 ADK 2.0 graph（講師示範/閱讀材料） | 閱讀 |
+| Lab 5 | `lab5_workflow_graph/` | 把 Lab 1–4 整套翻成 **真的能跑的 ADK 2.0 graph**（正式版 2.x，`lab5_demo.ipynb` 在 Colab 現場跑；`compare.py` 講並行原理） | Colab notebook |
 | 延伸 | `challenges.md` | 給快的人的挑戰題 | 自選 |
 
 情境：**保健品行銷文案小組**（選這個是因為保健品廣告法規很具體，Lab 3 的護欄才「真實」而非硬湊）。
