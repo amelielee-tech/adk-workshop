@@ -90,15 +90,37 @@ writer = Agent(
 from google.genai import types
 
 async def approve_copy(tool_context: ToolContext) -> dict:
-    """審稿通過時呼叫此工具，結束修改迴圈、定稿並存檔。"""
+    """
+    核准並儲存最終廣告文案。
+
+    執行流程：
+    1. 從 session state 的「campaign_copy」取得 Agent 產生的 JSON 文案。
+    2. 從 campaign_copy 中取得 slogan 清單，並選取第一筆作為最終文案。
+    3. 將文字以 UTF-8 編碼轉換成 bytes，建立 MIME type 為 text/markdown 的 Artifact Part。
+    4. 將 Artifact 儲存為 final_copy.md，並取得其版本編號。
+    5. 儲存成功後設定 escalate=True，通知 LoopAgent 結束執行。
+    6. 回傳核准狀態、檔案名稱與 Artifact 版本資訊。
+    """
+    campaign_data = tool_context.state.get("campaign_copy", {})
+    slogan_list = campaign_data.get("slogan", [])
+    final_copy = slogan_list[0]
+
+    version = await tool_context.save_artifact(
+        filename="final_copy.md",
+        artifact=types.Part.from_bytes(
+            data=final_copy.encode("utf-8"),
+            mime_type="text/markdown",
+        ),
+    )
+
     tool_context.actions.escalate = True
 
-    final_copy = tool_context.state.get("campaign_copy", "")
-    version = await tool_context.save_artifact(
-        "final_copy.md",
-        types.Part(text=final_copy),
-    )
-    return {"status": "approved", "message": "文案定稿", "version": version}
+    return {
+        "status": "approved",
+        "message": "文案定稿",
+        "filename": "final_copy.md",
+        "version": version,
+    }
 ```
 
 驗證：跑兩次不同產品的文案，到 adk web 的 Artifacts 面板
