@@ -1,0 +1,86 @@
+{
+  "eval_set_id": "copy_agent_evalset",
+  "name": "保健品文案小組 evalset",
+  "description": "評 lab2 campaign pipeline：trajectory(研究工具有沒有呼叫) + response(文案品質)。",
+  "eval_cases": [
+    {
+      "eval_id": "fishoil_taiwan_happy_path",
+      "conversation": [
+        {
+          "invocation_id": "inv-1",
+          "user_content": {
+            "parts": [
+              {
+                "text": "幫我為魚油(fish oil)做台灣市場的行銷文案。產品類別：魚油；市場：台灣。"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "精粹深海魚油，Omega-3 守護健康、支持專注日常。賣點：純淨無添加、足量 EPA/DHA、專為台灣上班族設計。透過 Facebook、YouTube 觸及 30-45 歲重視保健與心血管的族群。"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {
+                  "product_category": "魚油"
+                },
+                "name": "get_market_trends"
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 1755500000.0
+        }
+      ],
+      "creation_timestamp": 1755500000.0,
+      "final_session_state": {}
+    },
+    {
+      "eval_id": "probiotics_taiwan_happy_path",
+      "conversation": [
+        {
+          "invocation_id": "inv-1",
+          "user_content": {
+            "parts": [
+              {
+                "text": "幫我為益生菌做台灣市場的行銷文案。產品類別：益生菌；市場：台灣。"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "純淨益生菌，維持消化道機能、養成日常順暢好習慣。賣點：足量活菌、無添加、由內而外的健康活力。專為台灣一般成人設計，透過 Facebook、LINE、YouTube 觸及重視日常保健的族群。"
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "tool_uses": [
+              {
+                "args": {
+                  "product_category": "益生菌"
+                },
+                "name": "get_market_trends"
+              }
+            ],
+            "tool_responses": [],
+            "intermediate_responses": []
+          },
+          "creation_timestamp": 1755500000.0
+        }
+      ],
+      "creation_timestamp": 1755500000.0,
+      "final_session_state": {}
+    }
+  ],
+  "creation_timestamp": 1755500000.0
+}

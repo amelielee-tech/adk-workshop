@@ -4,13 +4,11 @@ __pycache__/
 .venv/
 .adk/
 .venv-adk2/
+.venv-eval137/
 
 # 本機簡報製作草稿（給 Claude UI 用，不進 repo）
 deck-design-prompt.md
 repo-facts-for-ui.md
-slides-additions-for-ui.md
-slides-code-demos-for-ui.md
-slides-handson-pages-for-ui.md
-slides-underlying-page-for-ui.md
+slides-*-for-ui.md
 workshop-prep-6-pomodoros.md
 .claude/
