@@ -1,24 +1,18 @@
-"""Lab A 效率步驟 —— 打一次 agent，量「延遲 latency」與「token 用量」。
+"""Lab A 效率步驟 —— 打一次 agent，① 看它吐的 event stream ② 量 latency 與 token。
 
 為什麼要這支：
-  adk eval 評的是「走對流程沒(trajectory) + 產出夠好沒(response)」，
-  但 scorecard 上還有一軸叫「效率」——時間多久、花多少 token。
-  這兩個數字**只有真的把 agent 跑一次才看得到**，evalset 看不出來。
+  adk eval 評「走對流程沒＋產出夠好沒」，但 scorecard 還有一軸叫「效率」——
+  時間多久、花多少 token。這兩個只有真的把 agent 跑一次才看得到。
 
-它怎麼拿到數字（重點觀念）：
-  ADK 每個「事件(event)」若來自一次 LLM 呼叫，就帶一包 usage_metadata，
-  裡面有 prompt / output / total token 數。把每個 event 的累加起來 = 這次任務的總 token；
-  用 time.time() 夾住整段 = latency。全部在本機 in-process，不需要部署任何 endpoint。
+原理（重點觀念）：
+  用 ADK 的 InMemoryRunner 跑 agent，runner.run_async() 會「一顆一顆」吐出 **event**
+  （每個 event＝一件發生的事：交棒、呼叫工具、工具回應、LLM 產文字…）。
+  其中「來自 LLM 呼叫」的 event 會帶一包 usage_metadata（prompt/output/total token）。
+  → 我們邊收 event 邊：印出來給你看、順便把 token 累加；前後夾 time.time() = latency。
 
-跑法（在 repo 根目錄、Cloud Shell / 本機都可，要有 Vertex 認證與 .env）：
-  set -a; source .env; set +a          # 載入 GOOGLE_CLOUD_PROJECT 等
-  python lab_eval/probe_efficiency.py           # 預設魚油
-  python lab_eval/probe_efficiency.py 益生菌     # 換一個產品
-
-看點：
-  - latency 幾秒？多代理管線(coordinator→研究→writer⇄reviewer→finalizer)會呼叫多次 LLM，通常不快。
-  - total tokens 多少？這對應 scorecard 的「費用壓縮」——token 就是錢。
-  - 把數字對照 slide 的「時間 ≤ 11 秒」門檻，討論：這條管線達得到嗎？該怎麼取捨？
+跑法（Colab / Cloud Shell 皆可，要有認證）：
+  python lab_eval/probe_efficiency.py          # 預設魚油
+  python lab_eval/probe_efficiency.py 益生菌    # 換產品
 """
 
 import asyncio
@@ -35,6 +29,22 @@ from google.genai import types
 from lab2_multi_agent.agent import root_agent
 
 
+def _describe(event) -> str:
+    """把一個 event 濃縮成一行人看得懂的描述。"""
+    bits = []
+    if event.content and event.content.parts:
+        for p in event.content.parts:
+            fc = getattr(p, "function_call", None)
+            fr = getattr(p, "function_response", None)
+            if fc:
+                bits.append(f"呼叫工具 {fc.name}")
+            elif fr:
+                bits.append(f"工具回應 {fr.name}")
+            elif getattr(p, "text", None):
+                bits.append("產文字：" + p.text.strip().replace("\n", " ")[:24])
+    return "；".join(bits) if bits else "(狀態更新)"
+
+
 async def run_once(product: str) -> None:
     runner = InMemoryRunner(agent=root_agent, app_name="lab_eval_efficiency")
     session = await runner.session_service.create_session(
@@ -43,31 +53,37 @@ async def run_once(product: str) -> None:
     prompt = f"幫我為{product}做台灣市場的行銷文案。產品類別：{product}；市場：台灣。"
     message = types.Content(role="user", parts=[types.Part(text=prompt)])
 
-    llm_calls = prompt_tokens = output_tokens = total_tokens = 0
+    n = llm_calls = prompt_tokens = output_tokens = total_tokens = 0
     final_text = ""
 
+    print(f"===== agent 跑起來吐的 event stream（{product}）=====")
     start = time.time()
     async for event in runner.run_async(
         user_id="student", session_id=session.id, new_message=message
     ):
+        n += 1
         usage = getattr(event, "usage_metadata", None)
-        if usage:  # 這個 event 來自一次 LLM 呼叫
+        tok = ""
+        if usage:  # 這個 event 來自一次 LLM 呼叫 → 帶 token
             llm_calls += 1
             prompt_tokens += getattr(usage, "prompt_token_count", 0) or 0
             output_tokens += getattr(usage, "candidates_token_count", 0) or 0
             total_tokens += getattr(usage, "total_token_count", 0) or 0
+            tok = f"  [+{getattr(usage, 'total_token_count', 0)} tok]"
+        author = getattr(event, "author", "?")
+        print(f"event {n:2d} | {author:20.20s} | {_describe(event)}{tok}")
         if event.is_final_response() and event.content:
             final_text = "".join(p.text or "" for p in event.content.parts)
     latency = time.time() - start
 
-    print("\n===== 效率指標（{}）=====".format(product))
+    print(f"\n===== 效率總計（{product}）=====")
     print(f"latency（牆鐘）: {latency:.1f} 秒")
-    print(f"LLM 呼叫次數   : {llm_calls}")
+    print(f"event 總數     : {n}（其中 {llm_calls} 個來自 LLM 呼叫、帶 token）")
     print(f"prompt tokens  : {prompt_tokens}")
     print(f"output tokens  : {output_tokens}")
     print(f"total tokens   : {total_tokens}")
     print(f"最終文案前 60 字: {final_text[:60]}")
-    print("\n看點：對照 scorecard 的「時間 ≤ 11 秒 / 費用壓縮」——這條多代理管線達得到嗎？")
+    print("\n看點：① 每個 LLM event 的 token 加總就是 total ② 對照 scorecard「時間 ≤ 11 秒」——這條多代理管線達得到嗎？")
 
 
 if __name__ == "__main__":
