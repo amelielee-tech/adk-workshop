@@ -22,8 +22,12 @@
 """
 
 import asyncio
+import os
 import sys
 import time
+
+# 讓「python lab_eval/probe_efficiency.py」從 repo 根目錄跑時，找得到 lab2_multi_agent
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from google.adk.runners import InMemoryRunner
 from google.genai import types
