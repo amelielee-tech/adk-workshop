@@ -1,4 +1,7 @@
 .env
+# service account 金鑰 — 絕不進 repo
+*-key.json
+*service-account*.json
 __pycache__/
 *.pyc
 .venv/
